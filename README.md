@@ -8,7 +8,7 @@ This project aims to detect Diabetic Retinopathy (DR) using a Convolutional Neur
 ## Features
 - **User Authentication:** Users can sign up and log in using Flask-Login.
 - **Form Submission:** Authenticated users can submit a form with details about their condition.
-- **Image Upload and Prediction:** Users can upload retinal images, which are processed and analyzed by a pre-trained DenseNet121 model to predict the severity of DR.
+- **Image Upload and Prediction:** Users can upload retinal images, which are processed and analyzed by pre-trained DenseNet121, DenseNet201, and InceptionV3 models to predict the severity of DR.
 - **Model:** The model predicts the severity level of DR, categorized as "No DR", "Mild", "Moderate", "Severe", or "Proliferative DR".
 
 ## Installation
@@ -71,7 +71,7 @@ requirements.txt  - Python dependencies
 ```
 
 ## Model Details
-The model used is DenseNet121, which includes:
+The models used are DenseNet121, DenseNet201, and InceptionV3, which include:
 - **Dense Blocks:** Multiple dense blocks for feature reuse.
 - **Transition Layers:** Layers to control feature map growth.
 - **Bottleneck Layers:** Layers to improve computational efficiency.
