@@ -65,9 +65,9 @@ python app.py
 /templates        - HTML templates for the Flask app
 /models           - Directory for ML model definition
 /static           - Static files (CSS, JS, images)
+/instance         - SQLite database (generated after first run)
 app.py            - Main Flask application
 requirements.txt  - Python dependencies
-login.db          - SQLite database (generated after first run)
 ```
 
 ## Model Details
