@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Upload</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Your existing CSS */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-image: url('static/img/bg_upload.JPG');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+      position: relative;
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .card {
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      margin-right: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      padding: 30px;
+      max-width: 400px;
+      width: 100%;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card:hover .upload-icon {
+      transform: scale(1.1);
+    }
+
+    .card.upload-form:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .card.severity-details:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .upload-form {
+      text-align: center;
+    }
+
+    h2 {
+      margin: 0 0 20px;
+      color: #007bff;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      font-size: 16px;
+      color: #007bff;
+      margin-bottom: 5px;
+      display: inline-block;
+    }
+
+    .form-group input {
+      width: calc(100% - 10px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .form-group select {
+      width: calc(100% - 10px);
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #form button[type="submit"] {
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 24px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    #form button[type="submit"]:hover {
+      background-color: #218838;
+    }
+
+    #image-input {
+      display: none;
+    }
+
+    label {
+      cursor: pointer;
+      font-size: 16px;
+      color: #007bff;
+      margin-bottom: 10px;
+      display: inline-block;
+      transition: color 0.3s;
+    }
+
+    label:hover {
+      color: #0056b3;
+    }
+
+    .upload-icon {
+      margin-bottom: 10px;
+      color: #007bff;
+      transition: color 0.3s;
+    }
+
+    label:hover .upload-icon {
+      color: #0056b3;
+    }
+
+    #upload-button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 12px 24px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      margin-top: 20px;
+    }
+
+    #upload-button:hover {
+      background-color: #0056b3;
+    }
+
+    #image-preview-container {
+      margin-top: 20px;
+      max-height: 300px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+    }
+
+    #image-preview-container img {
+      max-width: 100%;
+      max-height: 300px;
+      border-radius: 8px;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .spinner {
+      margin-top: 20px;
+      display: none;
+    }
+
+    .spinner i {
+      font-size: 24px;
+      color: #007bff;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* New CSS for logout button */
+    #logout-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+    }
+
+    #logout-button:hover {
+      background-color: #c82333;
+    }
+  </style>
+</head>
+<body>
+  <button id="logout-button" onclick="logout()">Logout</button>
+  <div class="container">
+    <div class="card">
+      <h2>Patient Details</h2>
+      <form id="form">
+        <div class="form-group">
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+          <label for="description">Description:</label>
+          <input type="text" id="description" name="description" required>
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number:</label>
+          <input type="text" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+          <label for="location">Location:</label>
+          <input type="text" id="location" name="location" required>
+        </div>
+        <div class="form-group">
+          <label for="severity">Severity:</label>
+          <select id="severity" name="severity" required>
+            <option value="No_DR">NO DR</option>
+            <option value="Mild">Mild</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Proliferate_DR">Proliferate</option>
+            <option value="Severe">Severe</option>
+          </select>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <div class="card upload-form">
+      <h2>Upload Image</h2>
+      <label for="image-input">
+        <i class="fas fa-cloud-upload-alt fa-3x upload-icon"></i><br>
+        <span>Choose an image</span>
+      </label>
+      <form id="image-upload-form" enctype="multipart/form-data">
+        <input type="file" id="image-input" name="image" accept="image/*">
+        <div id="image-preview-container"></div>
+        <button type="submit" id="upload-button">Upload</button>
+      </form>
+      <div id="result"></div>
+      <div class="spinner" id="spinner">
+        <i class="fas fa-spinner"></i>
+      </div>
+    </div>
+    <div class="card severity-details">
+      <h2>Severity Details</h2>
+      <div id="severity-details-container"></div>
+    </div>
+  </div>
+
+  <script>
+    const imageUploadForm = document.getElementById('image-upload-form');
+    const imageInput = document.getElementById('image-input');
+    const imagePreviewContainer = document.getElementById('image-preview-container');
+    const resultDiv = document.getElementById('result');
+    const spinner = document.getElementById('spinner');
+    const form = document.getElementById('form');
+    const severityDetailsContainer = document.getElementById('severity-details-container');
+
+    // Function to update severity details
+    function updateSeverityDetails(severity) {
+      const severityDetails = {
+        No_DR: "This category indicates that there are no signs of Diabetic Retinopathy present in the retinal images. Patients falling under this category exhibit no abnormalities associated with the condition, suggesting a healthy state of the retina.",
+        Mild: "In this category, the retinal images show early signs of Diabetic Retinopathy. Typically, there may be mild abnormalities such as microaneurysms, small hemorrhages, or slight swelling of blood vessels. However, these changes are generally not severe and may not significantly impact vision at this stage",
+        Moderate: "This category indicates a progression in the severity of Diabetic Retinopathy. Retinal images in this category often display more pronounced abnormalities, including moderate hemorrhages, venous beading, and more extensive swelling or leakage of blood vessels. These changes may start to affect vision and require closer monitoring and intervention.",
+        Proliferate_DR: "This is the most advanced stage of Diabetic Retinopathy. In this category, retinal images often reveal the growth of abnormal blood vessels on the surface of the retina or optic nerve head, known as neovascularization. These new blood vessels are fragile and prone to bleeding, leading to severe vision loss or even blindness if left untreated. Management at this stage typically involves laser therapy or surgical interventions to prevent complications.",
+        Severe: "Patients falling under this category exhibit advanced stages of Diabetic Retinopathy. Retinal images typically show severe hemorrhages, extensive swelling and leakage of blood vessels, as well as the presence of cotton wool spots and intraretinal microvascular abnormalities (IRMAs). Vision impairment is more pronounced at this stage, and prompt medical intervention is crucial to prevent further damage."
+      };
+
+      severityDetailsContainer.innerHTML = `<p>Severity Level: ${severity}</p>
+                                           <p>Details: ${severityDetails[severity]}</p>`;
+    }
+
+    // Event listener for severity select change
+    document.getElementById('severity').addEventListener('change', (event) => {
+      const selectedSeverity = event.target.value;
+      updateSeverityDetails(selectedSeverity);
+    });
+
+    // Initialize severity details on page load
+    updateSeverityDetails(document.getElementById('severity').value);
+
+    imageUploadForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const file = imageInput.files[0];
+      if (file) {
+        spinner.style.display = 'block';
+        const formData = new FormData();
+        formData.append('image', file);
+
+        fetch('/predict', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          if (data.success) {
+            resultDiv.textContent = `Prediction: ${data.prediction}`;
+          } else {
+            resultDiv.textContent = `Error: ${data.error}`;
+          }
+          spinner.style.display = 'none';
+        })
+        .catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+          resultDiv.textContent = `Error: ${error.message}`;
+          spinner.style.display = 'none';
+        });
+      } else {
+        resultDiv.textContent = 'Please select an image file.';
+      }
+    });
+
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          imagePreviewContainer.innerHTML = '';
+          imagePreviewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        imagePreviewContainer.innerHTML = '';
+      }
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      fetch('/submit-form', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message);
+          form.reset();  // Reset form after successful submission
+        } else {
+          alert('Error: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+        alert('Error: ' + error.message);
+      });
+    });
+
+    function logout() {
+      alert('Logged out successfully!');
+      window.location.href = '/logout';
+    }
+
+    // Animation for card display
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      card.style.opacity = '1';
+      card.style.transform = 'translateY(0)';
+    });
+
+  </script>
+</body>
+</html>
