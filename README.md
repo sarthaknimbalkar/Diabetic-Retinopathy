@@ -65,7 +65,7 @@ python app.py
 ## Project Structure
 ```
 /uploads          - Directory for storing uploaded images
-/colored_images   - Add the dataset images to this folder
+/sorted_images   - Add the dataset images to this folder
 /templates        - HTML templates for the Flask app
 /models           - Directory for ML model definition
 /static           - Static files (CSS, JS, images)
