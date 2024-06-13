@@ -71,7 +71,7 @@ python app.py
 /static           - Static files (CSS, JS, images)
 /instance         - SQLite database (generated after first run)
 app.py            - Main Flask application
-DR-Final          - Jupyter Notebook used to train the models
+DR-final.ipynb    - Jupyter Notebook used to train the models
 requirements.txt  - Python dependencies
 ```
 
