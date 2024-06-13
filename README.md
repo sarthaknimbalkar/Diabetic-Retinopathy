@@ -11,10 +11,13 @@ This project aims to detect Diabetic Retinopathy (DR) using a Convolutional Neur
 - **Image Upload and Prediction:** Users can upload retinal images, which are processed and analyzed by pre-trained DenseNet121, DenseNet201, and InceptionV3 models to predict the severity of DR.
 - **Model:** The model predicts the severity level of DR, categorized as "No DR", "Mild", "Moderate", "Severe", or "Proliferative DR".
 
+## Dataset 
+Download the dataset from here: https://www.kaggle.com/competitions/aptos2019-blindness-detection/data
+
 ## Installation
 
 ### Prerequisites
-- Python 3.7+
+- Python 3.10.x
 - Virtualenv (recommended)
 
 ### Dependencies
@@ -62,6 +65,7 @@ python app.py
 ## Project Structure
 ```
 /uploads          - Directory for storing uploaded images
+/colored_images   - Add the dataset images to this folder
 /templates        - HTML templates for the Flask app
 /models           - Directory for ML model definition
 /static           - Static files (CSS, JS, images)
